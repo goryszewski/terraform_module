@@ -6,9 +6,9 @@ output "id" {
 #   value = libvirt_domain.node
 # }
 
-output "local_ip" {
+output "external" {
   value = libvirt_domain.node.network_interface[0].addresses
 }
-output "public_ip" {
+output "internal" {
   value = libvirt_domain.node.network_interface[1].addresses
 }

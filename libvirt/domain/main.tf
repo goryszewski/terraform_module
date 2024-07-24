@@ -2,7 +2,7 @@ terraform {
   required_version = ">= 1.0.1"
   required_providers {
     libvirt = {
-      source  = "dmacvicar/libvirt"
+      source = "dmacvicar/libvirt"
 
     }
   }
@@ -18,17 +18,17 @@ resource "libvirt_volume" "image" {
 
 
 resource "libvirt_domain" "node" {
-  name   = "${var.hostname}.${var.domain}"
-  memory = var.memoryMB
-  vcpu   = var.cpu
+  name        = "${var.hostname}.${var.domain}"
+  memory      = var.memoryMB
+  vcpu        = var.cpu
   description = join("_", var.tags)
-  autostart = false
+  autostart   = false
   disk {
     volume_id = libvirt_volume.image.id
   }
 
   network_interface {
-    network_name  = var.public_network
+    network_name = var.public_network
   }
 
   network_interface {
@@ -51,11 +51,11 @@ resource "libvirt_domain" "node" {
   }
 
   connection {
-    type     = "ssh"
-    user     = var.user
-    private_key = "${file("~/.ssh/id_rsa")}"
-    timeout = "2m"
-    host     = self.network_interface[0].addresses[0]
+    type        = "ssh"
+    user        = var.user
+    private_key = file("~/.ssh/id_rsa")
+    timeout     = "2m"
+    host        = self.network_interface[0].addresses[0]
   }
 
   provisioner "file" {
@@ -77,7 +77,7 @@ resource "libvirt_domain" "node" {
   # }
 
   provisioner "local-exec" {
-    command = "${path.module}/files/local.sh ${self.network_interface[0].addresses[0]} ${var.hostname}.${var.domain}"
+    command    = "${path.module}/files/local.sh ${self.network_interface[0].addresses[0]} ${var.hostname}.${var.domain}"
     on_failure = continue
   }
 }
