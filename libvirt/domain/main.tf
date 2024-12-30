@@ -9,7 +9,7 @@ terraform {
 }
 
 resource "libvirt_volume" "image" {
-  name   = "${var.hostname}-image"
+  name   = "${var.hostname}-image.qcow2"
   pool   = var.pool
   source = var.template
   format = "qcow2"
